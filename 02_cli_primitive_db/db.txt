@@ -1,0 +1,3 @@
+{"name":"Oleg","gender":"male","age":"17"}
+{"name":"Egor","gender":"male","age":"11"}
+{"name":"Sasha","gender":"female"}
