@@ -9,7 +9,14 @@ const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN,{polling:true})
 let interval
 
 const sendMessage = async (msg) => {
-    const forecast = await getForecast()
+    let forecast
+    try {
+        forecast = await getForecast()
+    }catch (e) {
+        await bot.sendMessage(msg.chat.id, 'Something went wrong')
+        return
+    }
+
     bot.sendMessage(msg.chat.id, createMessage(forecast.list))
 }
 
