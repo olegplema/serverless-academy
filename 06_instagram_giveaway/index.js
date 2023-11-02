@@ -2,6 +2,17 @@ const fs = require('fs')
 const readline = require('readline')
 const path = require("path");
 
+//1
+
+const files = []
+
+const readFiles = async () => {
+    for (let i = 0; i < 20; i++){
+        const fileData = await getUniqueUsernames(path.join('files',`out${i}.txt`))
+        files.push(fileData)
+    }
+}
+
 const getUniqueUsernames = async (filename) => {
     const usernames = new Set()
     const stream = fs.createReadStream(filename)
@@ -19,12 +30,10 @@ const getUniqueUsernames = async (filename) => {
 const uniqueValues = async () => {
     const usernames = new Set()
 
-    for (let i = 0; i < 20; i++) {
-        const res = await getUniqueUsernames(path.join('files',`out${i}.txt`))
-        for (const el of res){
+    files.forEach(file => {
+        for (const el of file)
             usernames.add(el)
-        }
-    }
+    })
 
     return usernames.size
 }
@@ -32,14 +41,13 @@ const uniqueValues = async () => {
 const existInAtLeastTen = async () => {
     const map = new Map()
 
-    for (let i = 0; i < 20; i++) {
-        const res = await getUniqueUsernames(path.join('files',`out${i}.txt`))
-        for (const el of res){
+    files.forEach(file => {
+        for (const el of file){
             if (map.has(el)){
                 map.set(el, map.get(el) + 1)
             }else map.set(el, 1)
         }
-    }
+    })
 
     let count = 0
 
@@ -53,20 +61,22 @@ const existInAtLeastTen = async () => {
 
 const existInAllFiles = async () => {
     let set = new Set()
-    const first = await getUniqueUsernames(path.join('files',`out0.txt`))
+    const first = files[0]
     for (const username of first) {
         set.add(username)
     }
-    for (let i = 1; i < 20; i++){
-        const usernames = await getUniqueUsernames(path.join('files',`out${i}.txt`))
+    for (let i = 1; i < files.length; i++){
+        const usernames = files[i]
         set = new Set([...set].filter(username => usernames.has(username)))
     }
+
     return set.size
 }
 
 
 const start = async () => {
     const start = new Date()
+    await readFiles()
     const unique = await uniqueValues()
     const ex10 = await existInAtLeastTen()
     const exAll = await existInAllFiles()
