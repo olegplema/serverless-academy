@@ -1,19 +1,21 @@
 const fs = require('fs')
 
+const filepath = './db.txt'
+
 const addUser = (user) => {
-    fs.appendFile(process.env.FILE_PATH,  JSON.stringify(user) + '\n',(err) => {
+    fs.appendFile(filepath,  JSON.stringify(user) + '\n',(err) => {
         if (err)
             console.log('Something went wrong')
     })
 }
 
 const readFile = () => {
-    return fs.readFileSync(process.env.FILE_PATH).toString().split('\n').filter(el => el !== '')
+    return fs.readFileSync(filepath).toString().split('\n').filter(el => el !== '')
 }
 
 const findUser = (username) => {
     let users
-    if (fs.existsSync(process.env.FILE_PATH)){
+    if (fs.existsSync(filepath)){
         users = readFile()
         return users.find(user => JSON.parse(user).name.toLowerCase() === username.toLowerCase())
     }else return null

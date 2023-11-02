@@ -3,7 +3,7 @@ const TelegramBot = require('node-telegram-bot-api')
 const fs = require('fs')
 const path = require('path')
 process.env.NTBA_FIX_350 = true
-
+console.log(process.env.ABC)
 const token = process.env.TOKEN
 const chatId = process.env.CHAT_ID
 const bot = new TelegramBot(token)
